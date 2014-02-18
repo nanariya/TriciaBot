@@ -15,6 +15,12 @@ namespace TriciaBot
         public MainForm()
         {
             InitializeComponent();
+
+            AppData appData = new AppData();
+            appData.ConsumerKey = "aaa";
+            NTLIB.Tool.SaveConfig(appData);
+
+            appData = NTLIB.Tool.LoadConfig(typeof(AppData));
         }
     }
 }

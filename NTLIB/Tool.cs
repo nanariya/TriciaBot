@@ -14,6 +14,8 @@ namespace NTLIB
         {
             try
             {
+                if (obj == null) throw new Exception("null");
+
                 String fileName = obj.GetType().Name + ".conf";
 
                 DataContractSerializer srz =
@@ -27,7 +29,7 @@ namespace NTLIB
             }
             catch (Exception e)
             {
-                throw new Exception("(´A'）", e);
+                throw new Exception("(´A'）書けね" , e);
             }
         }
 
@@ -38,7 +40,7 @@ namespace NTLIB
 
             try
             {
-                String fileName = objType.GetType().Name + ".conf";
+                String fileName = objType.Name + ".conf";
 
                 DataContractSerializer srz =
                     new DataContractSerializer(objType);
@@ -51,7 +53,7 @@ namespace NTLIB
             }
             catch (Exception e)
             {
-                throw new Exception("(´A'）", e);
+                throw new Exception("(´A'）読めね", e);
             }
 
             return obj;
