@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriciaBot", "TriciaBot\TriciaBot.csproj", "{2827E639-8D2A-4492-BB35-016D365771ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTLIB", "NTLIB\NTLIB.csproj", "{7DD66D37-7264-412B-834A-1EDBB88F81BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2827E639-8D2A-4492-BB35-016D365771ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2827E639-8D2A-4492-BB35-016D365771ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2827E639-8D2A-4492-BB35-016D365771ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DD66D37-7264-412B-834A-1EDBB88F81BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD66D37-7264-412B-834A-1EDBB88F81BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD66D37-7264-412B-834A-1EDBB88F81BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD66D37-7264-412B-834A-1EDBB88F81BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
