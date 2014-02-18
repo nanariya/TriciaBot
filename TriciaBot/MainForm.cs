@@ -22,5 +22,10 @@ namespace TriciaBot
 
             appData = NTLIB.Tool.LoadConfig(typeof(AppData));
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            richTextBox1.AppendText( NTLIB.Juman.execJuman("テスト文字列"));
+        }
     }
 }
