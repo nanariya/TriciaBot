@@ -1,6 +1,6 @@
 TriciaBot
 =========
 
-ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ
+å¤–éƒ¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
  Juman http://nlp.ist.i.kyoto-u.ac.jp/index.php?JUMAN
  TweetSharp https://github.com/danielcrenna/tweetsharp
