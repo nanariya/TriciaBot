@@ -10,13 +10,19 @@ namespace NTLIB
 {
     public static class Tool
     {
+        private static String FileExtension = ".conf";
+
+        public static String ConfigFilename(Type objType)
+        {
+            return objType.Name + FileExtension;
+        }
         public static void SaveConfig(Object obj)
         {
             try
             {
                 if (obj == null) throw new Exception("null");
 
-                String fileName = obj.GetType().Name + ".conf";
+                String fileName = obj.GetType().Name + FileExtension;
 
                 DataContractSerializer srz =
                     new DataContractSerializer(obj.GetType());
@@ -40,7 +46,7 @@ namespace NTLIB
 
             try
             {
-                String fileName = objType.Name + ".conf";
+                String fileName = objType.Name + FileExtension;
 
                 DataContractSerializer srz =
                     new DataContractSerializer(objType);

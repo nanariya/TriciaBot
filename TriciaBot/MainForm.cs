@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace TriciaBot
 {
@@ -19,25 +20,39 @@ namespace TriciaBot
         {
             InitializeComponent();
 
-            AppData appData = NTLIB.Tool.LoadConfig(typeof(AppData));
+            AppData appData = null;
+
+            if (!File.Exists(NTLIB.Tool.ConfigFilename(typeof(AppData))))
+            {
+                appData = new AppData();
+                NTLIB.Tool.SaveConfig(appData);
+            }
+
+            try
+            {
+                appData = NTLIB.Tool.LoadConfig(typeof(AppData));
+            }
+            catch(Exception)
+            {
+                
+            }
 
             _Twitter = new NTLIB.Twitter();
             _Twitter.ConsumerKey = appData.ConsumerKey;
             _Twitter.ConsumerSecret = appData.ConsumerSecret;
 
+            if(Properties.Settings.Default.AccessToken != "" && Properties.Settings.Default.AccessSecret != "")
+            {
+                label1.Text = "認証済";
+                _Twitter.AccessToken = Properties.Settings.Default.AccessToken;
+                _Twitter.AccessSecret = Properties.Settings.Default.AccessSecret;
+                _Twitter.isAuthed = true;
+            }
+
         }
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {//ブラウザロード完了
-            AppData appData = NTLIB.Tool.LoadConfig(typeof(AppData));
-            String html = webBrowser1.DocumentText;
-            if(0 < html.IndexOf(appData.PinCodeStartTag))
-            {
-                webBrowser1.Visible = false;
-                int loc = html.IndexOf(appData.PinCodeStartTag);
-                String pinCode = html.Substring(loc, appData.PinCodeOffset);
-                pinCode = pinCode.Replace(appData.PinCodeStartTag, "");
-                textBox1.Text = pinCode;
-            }
+            textBox1.Text = _Twitter.GetPinCodeFromHTML(webBrowser1.DocumentText);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -54,6 +69,11 @@ namespace TriciaBot
             {
                 _Twitter.PinCodeAuth(textBox1.Text);
             }
+            //アクセストークンを保存
+            Properties.Settings.Default.AccessToken = _Twitter.AccessToken;
+            Properties.Settings.Default.AccessSecret = _Twitter.AccessSecret;
+            Properties.Settings.Default.Save();
+
         }
     }
 }
