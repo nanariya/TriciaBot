@@ -70,6 +70,12 @@ namespace TriciaBot
             Properties.Settings.Default.AccessSecret = _Twitter.AccessSecret;
             Properties.Settings.Default.Save();
 
+            if (Properties.Settings.Default.AccessToken != "" && Properties.Settings.Default.AccessSecret != "")
+            {
+                _Twitter.AuthenticateWith(Properties.Settings.Default.AccessToken, Properties.Settings.Default.AccessSecret);
+                label1.Text = "認証済";
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -64,7 +64,6 @@ namespace NTLIB
             }
             catch(Exception e )
             {
-                throw new Exception("エラー", e);
             }
         }
         public String GetPinCodeFromHTML(String html)
