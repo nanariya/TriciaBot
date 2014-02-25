@@ -37,16 +37,12 @@ namespace TriciaBot
                 
             }
 
-            _Twitter = new NTLIB.Twitter();
-            _Twitter.ConsumerKey = appData.ConsumerKey;
-            _Twitter.ConsumerSecret = appData.ConsumerSecret;
+            _Twitter = new NTLIB.Twitter(appData.ConsumerKey, appData.ConsumerSecret);
 
             if(Properties.Settings.Default.AccessToken != "" && Properties.Settings.Default.AccessSecret != "")
             {
+                _Twitter.AuthenticateWith(Properties.Settings.Default.AccessToken, Properties.Settings.Default.AccessSecret);
                 label1.Text = "認証済";
-                _Twitter.AccessToken = Properties.Settings.Default.AccessToken;
-                _Twitter.AccessSecret = Properties.Settings.Default.AccessSecret;
-                _Twitter.isAuthed = true;
             }
 
         }
@@ -74,6 +70,14 @@ namespace TriciaBot
             Properties.Settings.Default.AccessSecret = _Twitter.AccessSecret;
             Properties.Settings.Default.Save();
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+             if(_Twitter != null)
+             {
+                 _Twitter.SendTweet("くそねみの森");
+             }
         }
     }
 }
