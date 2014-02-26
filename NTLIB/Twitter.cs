@@ -7,6 +7,9 @@ using TweetSharp;
 
 namespace NTLIB
 {
+    /// <summary>
+    /// ε＝└(┐卍՞ةڼ◔)卍
+    /// </summary>
     public class Twitter
     {
         private TwitterService _TwitterService = null;
@@ -32,6 +35,13 @@ namespace NTLIB
             this.ConsumerSecret = consumerSecret;
         }
 
+        /// <summary>
+        /// オレが└(՞ةڼ◔)」コンストラクタだ
+        /// </summary>
+        /// <param name="consumerKey">Sweet Rain♪L( ＾ω＾ )┘♪</param>
+        /// <param name="consumerSecret">降りだした雨♪└( ＾ω＾ )」♪</param>
+        /// <param name="accessToken">傘なんて♪L( ＾ω＾ )┘♪</param>
+        /// <param name="accessSecret">必要♪└( ＾ω＾ )」♪無いから♪L( ＾ω＾ )┘♪</param>
         public Twitter(String consumerKey, String consumerSecret, String accessToken, String accessSecret)
         {
             this.isAuthed = true;
