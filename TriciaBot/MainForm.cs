@@ -82,8 +82,20 @@ namespace TriciaBot
         {
              if(_Twitter != null)
              {
-                 _Twitter.SendTweet("くそねみの森");
+                 //_Twitter.SendTweet("くそねみの森");
+
+                 List<NTLIB.TwitterResult> res = _Twitter.ListHomeTimeline();
+                                  
+                 foreach(NTLIB.TwitterResult row in res)
+                 {
+                     richTextBox1.AppendText(
+                         row.UserScreenName + ":" + row.Text + Environment.NewLine
+
+                         );
+                 }
+
              }
+            
         }
     }
 }

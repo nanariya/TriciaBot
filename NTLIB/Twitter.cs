@@ -18,9 +18,11 @@ namespace NTLIB
         public String AccessToken { get; private set; }
         public String AccessSecret { get; private set; }
 
+        public List<TwitterResult> HomeTimeLine { get; private set; }
+
         private String PinCodeStartTag = "<CODE>";
         private Int32 PinCodeOffset = 13;
-        
+
 
         public Twitter(String consumerKey, String consumerSecret)
         {
@@ -39,6 +41,36 @@ namespace NTLIB
             _TwitterService.AuthenticateWith(this.AccessToken, this.AccessSecret);
             this.AccessToken = accessToken;
             this.AccessSecret = accessSecret;
+        }
+
+        private TwitterResult ConvertResult(TwitterStatus row)
+        {
+
+            TwitterResult res = new TwitterResult();
+
+            if (row != null)
+            {
+                res.CreateDate = row.CreatedDate;
+                res.ID = row.Id;
+                res.IdStr = row.IdStr;
+                res.InReplyToScreenName = row.InReplyToScreenName;
+                res.InReplyToUserId = row.InReplyToUserId;
+                res.IsFavorited = row.IsFavorited;
+                res.IsPossiblySensitive = row.IsPossiblySensitive;
+                res.IsTruncated = row.IsTruncated;
+                if (row.Location != null)
+                {
+                    res.Latitude = row.Location.Coordinates.Latitude;
+                    res.Longitude = row.Location.Coordinates.Longitude;
+                }
+                res.RetweetCount = row.RetweetCount;
+                res.RetweetedStatus = ConvertResult(row.RetweetedStatus);
+                res.Source = row.Source;
+                res.Text = row.Text;
+                res.UserName = row.User.Name;
+                res.UserScreenName = row.User.ScreenName;
+            }
+            return res;
         }
 
         public void AuthenticateWith(String accessToken, String accessSecret)
@@ -62,7 +94,7 @@ namespace NTLIB
                 this.AccessSecret = accessToken.TokenSecret;
                 this.isAuthed = true;
             }
-            catch(Exception e )
+            catch(Exception)
             {
             }
         }
@@ -83,8 +115,38 @@ namespace NTLIB
         public void SendTweet(String message)
         {
             TwitterStatus result = _TwitterService.SendTweet(new SendTweetOptions { Status = message });
-            
+        }
+        public List<TwitterResult> ListHomeTimeline()
+        {
+            IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions());
 
+            List<TwitterResult> convertResponse = new List<TwitterResult>();
+
+            foreach (TwitterStatus row in response)
+            {
+                TwitterResult res = ConvertResult(row);
+                convertResponse.Add(res);
+            }
+
+            return convertResponse;
+        }
+
+        public List<TwitterResult> ListHomeTimeline(Int64 LastID)
+        {
+            ListTweetsOnHomeTimelineOptions option = new ListTweetsOnHomeTimelineOptions();
+            option.SinceId = LastID;
+
+            IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(option);
+
+            List<TwitterResult> convertResponse = new List<TwitterResult>();
+
+            foreach(TwitterStatus row in response)
+            {
+                TwitterResult res = ConvertResult(row);
+                convertResponse.Add(res);
+            }
+
+            return convertResponse;
         }
     }
 }

@@ -46,5 +46,29 @@ namespace TriciaBot.Properties {
                 this["AccessSecret"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public long LastGettedID {
+            get {
+                return ((long)(this["LastGettedID"]));
+            }
+            set {
+                this["LastGettedID"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public long LastGettedReplyID {
+            get {
+                return ((long)(this["LastGettedReplyID"]));
+            }
+            set {
+                this["LastGettedReplyID"] = value;
+            }
+        }
     }
 }
