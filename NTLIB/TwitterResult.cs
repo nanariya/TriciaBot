@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace NTLIB
 {
+    /// <summary>
+    /// TwitterStatusの代わりに使う簡素なTwitterStatus
+    /// </summary>
     public class TwitterResult 
     {
         public DateTime CreateDate { get; set; }

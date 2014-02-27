@@ -53,6 +53,11 @@ namespace NTLIB
             this.AccessSecret = accessSecret;
         }
 
+        /// <summary>
+        /// 外部から隠匿するためにTweetSharpのTwitterStatusから最低限だけ抜き出す
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private TwitterResult ConvertResult(TwitterStatus row)
         {
 
@@ -126,6 +131,8 @@ namespace NTLIB
         {
             TwitterStatus result = _TwitterService.SendTweet(new SendTweetOptions { Status = message });
         }
+
+
         public List<TwitterResult> ListHomeTimeline()
         {
             IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions());
@@ -151,6 +158,38 @@ namespace NTLIB
             List<TwitterResult> convertResponse = new List<TwitterResult>();
 
             foreach(TwitterStatus row in response)
+            {
+                TwitterResult res = ConvertResult(row);
+                convertResponse.Add(res);
+            }
+
+            return convertResponse;
+        }
+
+        public List<TwitterResult> ListReplyTimeline()
+        {
+            IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions());
+
+            List<TwitterResult> convertResponse = new List<TwitterResult>();
+
+            foreach (TwitterStatus row in response)
+            {
+                TwitterResult res = ConvertResult(row);
+                convertResponse.Add(res);
+            }
+
+            return convertResponse;
+        }
+        public List<TwitterResult> ListReplyTimeline(Int64 LastID)
+        {
+            ListTweetsMentioningMeOptions option = new ListTweetsMentioningMeOptions();
+            option.SinceId = LastID;
+
+            IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsMentioningMe(option);
+
+            List<TwitterResult> convertResponse = new List<TwitterResult>();
+
+            foreach (TwitterStatus row in response)
             {
                 TwitterResult res = ConvertResult(row);
                 convertResponse.Add(res);
