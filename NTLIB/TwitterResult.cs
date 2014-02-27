@@ -24,6 +24,7 @@ namespace NTLIB
 
         public String UserName { get; set; }
         public String UserScreenName { get; set; }
+        public Int64 UserId { get; set; }
 
         public TwitterResult RetweetedStatus { get; set; }
 

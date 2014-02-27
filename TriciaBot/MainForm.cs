@@ -82,8 +82,8 @@ namespace TriciaBot
         {
              if(_Twitter != null)
              {
-                 //_Twitter.SendTweet("くそねみの森");
                  //List<NTLIB.TwitterResult> res = _Twitter.ListReplyTimeline(Properties.Settings.Default.LastGettedReplyID);
+                 /*
                  List<NTLIB.TwitterResult> res = _Twitter.ListReplyTimeline();
                                   
                  foreach(NTLIB.TwitterResult row in res)
@@ -94,21 +94,57 @@ namespace TriciaBot
 
                      foreach(NTLIB.JumanResult s in NTLIB.Juman.execJuman(row.Text))
                      {
-                         /*
-                         richTextBox1.AppendText(
-                             s.Word + " = " + s.Part + "(" + s.SubPart + ")" + Environment.NewLine
-                         );
-                         */
-
+                         //形態素解析した後
                      }
 
                      Properties.Settings.Default.LastGettedReplyID = row.ID;
                  }
 
                  Properties.Settings.Default.Save();
+                 */
+                 UserDB db = new UserDB(Properties.Settings.Default.DatabaseFileName);
+                 if (!File.Exists(Properties.Settings.Default.DatabaseFileName))
+                 {
+                     db.CreateUserDB();
+                 }
 
+                 List<NTLIB.TwitterResult> res = _Twitter.ListReplyTimeline();
+                 foreach (NTLIB.TwitterResult row in res)
+                 {
+                     db.AddUserData(row.UserId, row.UserName, row.UserScreenName);
+                 }
              }
-            
+        }
+
+        private void checkBoxTwitter_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBoxTwitter.Checked == true)
+            {
+                timer5minutes.Start();
+            }
+            else
+            {
+                timer5minutes.Stop();
+            }
+        }
+
+        private void timer5minutes_Tick(object sender, EventArgs e)
+        {
+            //5分毎の処理
+        }
+
+        delegate void TextAddDelegate(String text);
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            _Twitter.ListHomeTimelineLoop();
+            _Twitter.TestEvent += Twitter_TestEvent;
+        }
+
+        void Twitter_TestEvent(string result)
+        {
+            //throw new NotImplementedException();
+            Invoke(new TextAddDelegate(richTextBox1.AppendText), result);
         }
     }
 }

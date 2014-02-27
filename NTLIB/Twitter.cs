@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TweetSharp;
 
@@ -26,6 +27,10 @@ namespace NTLIB
         private String PinCodeStartTag = "<CODE>";
         private Int32 PinCodeOffset = 13;
 
+        public delegate void TwitterReceiveEventHandler(List<TwitterResult> result);
+        public event TwitterReceiveEventHandler TwitterReceiveEvent;
+        public delegate void TestEventHandler(String result);
+        public event TestEventHandler TestEvent;
 
         public Twitter(String consumerKey, String consumerSecret)
         {
@@ -84,6 +89,7 @@ namespace NTLIB
                 res.Text = row.Text;
                 res.UserName = row.User.Name;
                 res.UserScreenName = row.User.ScreenName;
+                res.UserId = row.User.Id;
             }
             return res;
         }
@@ -197,5 +203,34 @@ namespace NTLIB
 
             return convertResponse;
         }
+
+        public void ListHomeTimelineLoop()
+        {
+            //ListTweetsOnHomeTimelineOptions option = new ListTweetsOnHomeTimelineOptions();
+            //option.SinceId = LastID;
+            //IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(option);
+            Int32 maxStreamEvents = 5;
+            var block = new AutoResetEvent(false);
+            Int32 count = 0;
+
+            _TwitterService.StreamUser((streamEvent, res) =>
+            {
+                if (streamEvent is TwitterUserStreamEnd)
+                {
+                    block.Set();
+                }
+                TestEvent(streamEvent.RawSource);
+                //TwitterReceiveEvent();
+
+                count++;
+                if (count == maxStreamEvents)
+                {
+                    block.Set();
+                }
+            });
+
+
+        }
+        
     }
 }

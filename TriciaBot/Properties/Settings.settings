@@ -14,5 +14,14 @@
     <Setting Name="LastGettedReplyID" Type="System.Int64" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="DatabaseFileName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">user.sqlite3</Value>
+    </Setting>
+    <Setting Name="DBCreateUserTable" Type="System.String" Scope="User">
+      <Value Profile="(Default)">create table user(id LONG  PRIMARY KEY, name TEXT, screen_name TEXT,nick_name TEXT)</Value>
+    </Setting>
+    <Setting Name="DBSelectUserTable" Type="System.String" Scope="User">
+      <Value Profile="(Default)">select * from user</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -70,5 +70,42 @@ namespace TriciaBot.Properties {
                 this["LastGettedReplyID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("user.sqlite3")]
+        public string DatabaseFileName {
+            get {
+                return ((string)(this["DatabaseFileName"]));
+            }
+            set {
+                this["DatabaseFileName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("create table user(id LONG  PRIMARY KEY, name TEXT, screen_name TEXT,nick_name TEX" +
+            "T)")]
+        public string DBCreateUserTable {
+            get {
+                return ((string)(this["DBCreateUserTable"]));
+            }
+            set {
+                this["DBCreateUserTable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("select * from user")]
+        public string DBSelectUserTable {
+            get {
+                return ((string)(this["DBSelectUserTable"]));
+            }
+            set {
+                this["DBSelectUserTable"] = value;
+            }
+        }
     }
 }
