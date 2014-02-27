@@ -22,6 +22,14 @@ namespace TriciaBot
             sql.ExecuteNonQuery(Properties.Settings.Default.DBCreateUserTable);
         }
 
+        public String SelectUserNickname(Int64 id)
+        {
+            NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
+            DataTable res = sql.SelectQuery(Properties.Settings.Default.DBSelectUserTable);
+            DataRow row = res.Rows.Find(id);
+            if (row == null) return "";
+            return row["nick_name"].ToString();
+        }
         public void ChangeUserNickname(Int64 id, String nickName)
         {
             DataTable dt = SelectUserTable();

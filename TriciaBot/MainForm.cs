@@ -140,13 +140,30 @@ namespace TriciaBot
             //ここの条件にフォロワー限定を入れる　今は仮で開放
             if (result.InReplyToUserId == 2354246292L)
             {
+                UserDB db = new UserDB(Properties.Settings.Default.DatabaseFileName);
+                String nickName = db.SelectUserNickname(result.UserId);
+                if (nickName != "") nickName += "、";
+
                 Object[] param = { new Object(), new Object() };
-                param[0] = "@" + result.UserScreenName + " 今は" + DateTime.Now.ToString("tth時m分よ");
-                List<NTLIB.JumanResult> jumanResult = NTLIB.Juman.execJuman(result.Text);
-                foreach (NTLIB.JumanResult word in jumanResult)
+
+                Int32 posNickName = result.Text.IndexOf("Just call me ");
+
+                if (posNickName > 0)
                 {
-                    if (word.Word == "眠い" && word.Part == "形容詞") param[0] = "@" + result.UserScreenName + " 早く寝なさい₍₍ ᕕ(՞ةڼ◔)ᕗ⁾⁾";
+                    String preNickName = result.Text.Substring(posNickName + 13, result.Text.Length - posNickName - 13);// 気をつけて
+                    db.ChangeUserNickname(result.UserId, preNickName);
+                    param[0] = "@" + result.UserScreenName + " 今度から" + preNickName + "って呼ぶね";
                 }
+                else
+                {
+                    param[0] = "@" + result.UserScreenName + " " + nickName + "今は" + DateTime.Now.ToString("tth時m分よ");
+                    List<NTLIB.JumanResult> jumanResult = NTLIB.Juman.execJuman(result.Text);
+                    foreach (NTLIB.JumanResult word in jumanResult)
+                    {
+                        if (word.Word == "眠い" && word.Part == "形容詞") param[0] = "@" + result.UserScreenName + " " + nickName + "早く寝なさい₍₍ ᕕ(՞ةڼ◔)ᕗ⁾⁾";
+                    }
+                }
+
                 param[1] = result.ID;
                 System.Threading.Thread.Sleep(5000);
                 Invoke(new SendTweetReplyDelegate(_Twitter.SendTweetToReply), param);
