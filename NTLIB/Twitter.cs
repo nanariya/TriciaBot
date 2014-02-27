@@ -27,10 +27,9 @@ namespace NTLIB
         private String PinCodeStartTag = "<CODE>";
         private Int32 PinCodeOffset = 13;
 
-        public delegate void TwitterReceiveEventHandler(List<TwitterResult> result);
-        public event TwitterReceiveEventHandler TwitterReceiveEvent;
-        public delegate void TestEventHandler(String result);
-        public event TestEventHandler TestEvent;
+        //ユーザーストリームのPushを受け取ったときのイベント用
+        public delegate void TwitterReceiveStatusEventHandler(TwitterResult result);
+        public event TwitterReceiveStatusEventHandler TwitterReceiveStatusEvent;
 
         public Twitter(String consumerKey, String consumerSecret)
         {
@@ -137,6 +136,10 @@ namespace NTLIB
         {
             TwitterStatus result = _TwitterService.SendTweet(new SendTweetOptions { Status = message });
         }
+        public void SendTweetToReply(String message, Int64 toReplyId)
+        {
+            TwitterStatus result = _TwitterService.SendTweet(new SendTweetOptions { Status = message, InReplyToStatusId = toReplyId });
+        }
 
 
         public List<TwitterResult> ListHomeTimeline()
@@ -206,9 +209,6 @@ namespace NTLIB
 
         public void ListHomeTimelineLoop()
         {
-            //ListTweetsOnHomeTimelineOptions option = new ListTweetsOnHomeTimelineOptions();
-            //option.SinceId = LastID;
-            //IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(option);
             Int32 maxStreamEvents = 5;
             var block = new AutoResetEvent(false);
             Int32 count = 0;
@@ -219,8 +219,13 @@ namespace NTLIB
                 {
                     block.Set();
                 }
-                TestEvent(streamEvent.RawSource);
-                //TwitterReceiveEvent();
+
+                if(streamEvent is TwitterUserStreamStatus)
+                {
+                    TwitterUserStreamStatus status = (TwitterUserStreamStatus)streamEvent;
+                    TwitterResult convertedResult =  ConvertResult(status.Status);
+                    TwitterReceiveStatusEvent(convertedResult);
+                }
 
                 count++;
                 if (count == maxStreamEvents)
@@ -228,6 +233,9 @@ namespace NTLIB
                     block.Set();
                 }
             });
+
+            //block.WaitOne();
+            _TwitterService.CancelStreaming();
 
 
         }

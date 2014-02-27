@@ -120,31 +120,39 @@ namespace TriciaBot
         {
             if(checkBoxTwitter.Checked == true)
             {
-                timer5minutes.Start();
             }
             else
             {
-                timer5minutes.Stop();
             }
         }
 
-        private void timer5minutes_Tick(object sender, EventArgs e)
-        {
-            //5分毎の処理
-        }
-
         delegate void TextAddDelegate(String text);
+        delegate void SendTweetReplyDelegate(String text, Int64 toReplyId);
 
         private void button4_Click(object sender, EventArgs e)
         {
             _Twitter.ListHomeTimelineLoop();
-            _Twitter.TestEvent += Twitter_TestEvent;
+            _Twitter.TwitterReceiveStatusEvent += _Twitter_TwitterReceiveStatusEvent;
         }
 
-        void Twitter_TestEvent(string result)
+        void _Twitter_TwitterReceiveStatusEvent(NTLIB.TwitterResult result)
         {
-            //throw new NotImplementedException();
-            Invoke(new TextAddDelegate(richTextBox1.AppendText), result);
+            //ここの条件にフォロワー限定を入れる　今は仮で開放
+            if (result.InReplyToUserId == 2354246292L)
+            {
+                Object[] param = { new Object(), new Object() };
+                param[0] = "@" + result.UserScreenName + " 今は" + DateTime.Now.ToString("tth時m分よ");
+                List<NTLIB.JumanResult> jumanResult = NTLIB.Juman.execJuman(result.Text);
+                foreach (NTLIB.JumanResult word in jumanResult)
+                {
+                    if (word.Word == "眠い" && word.Part == "形容詞") param[0] = "@" + result.UserScreenName + " 早く寝なさい₍₍ ᕕ(՞ةڼ◔)ᕗ⁾⁾";
+                }
+                param[1] = result.ID;
+                System.Threading.Thread.Sleep(5000);
+                Invoke(new SendTweetReplyDelegate(_Twitter.SendTweetToReply), param);
+            }
+            Invoke(new TextAddDelegate(richTextBox1.AppendText), result.UserName + ":" + result.Text + Environment.NewLine);
         }
+
     }
 }
