@@ -23,5 +23,8 @@
     <Setting Name="DBSelectUserTable" Type="System.String" Scope="User">
       <Value Profile="(Default)">select * from user</Value>
     </Setting>
+    <Setting Name="MyUserID" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">2354246292</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

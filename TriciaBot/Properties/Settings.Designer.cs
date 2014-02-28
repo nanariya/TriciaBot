@@ -107,5 +107,17 @@ namespace TriciaBot.Properties {
                 this["DBSelectUserTable"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2354246292")]
+        public long MyUserID {
+            get {
+                return ((long)(this["MyUserID"]));
+            }
+            set {
+                this["MyUserID"] = value;
+            }
+        }
     }
 }

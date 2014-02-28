@@ -9,7 +9,7 @@ namespace NTLIB
     /// <summary>
     /// TwitterStatusの代わりに使う簡素なTwitterStatus
     /// </summary>
-    public class TwitterResult 
+    public class TwitterStatusLight 
     {
         public DateTime CreateDate { get; set; }
         public Int64 ID { get; set; }
@@ -26,7 +26,7 @@ namespace NTLIB
         public String UserScreenName { get; set; }
         public Int64 UserId { get; set; }
 
-        public TwitterResult RetweetedStatus { get; set; }
+        public TwitterStatusLight RetweetedStatus { get; set; }
 
         public Double Latitude { get; set; }
         public Double Longitude { get; set; }

@@ -82,37 +82,19 @@ namespace TriciaBot
         {
              if(_Twitter != null)
              {
-                 //List<NTLIB.TwitterResult> res = _Twitter.ListReplyTimeline(Properties.Settings.Default.LastGettedReplyID);
-                 /*
-                 List<NTLIB.TwitterResult> res = _Twitter.ListReplyTimeline();
-                                  
-                 foreach(NTLIB.TwitterResult row in res)
-                 {
-                     richTextBox1.AppendText(
-                         row.UserScreenName + ":" + row.Text + Environment.NewLine
-                         );
-
-                     foreach(NTLIB.JumanResult s in NTLIB.Juman.execJuman(row.Text))
-                     {
-                         //形態素解析した後
-                     }
-
-                     Properties.Settings.Default.LastGettedReplyID = row.ID;
-                 }
-
-                 Properties.Settings.Default.Save();
-                 */
                  UserDB db = new UserDB(Properties.Settings.Default.DatabaseFileName);
                  if (!File.Exists(Properties.Settings.Default.DatabaseFileName))
                  {
                      db.CreateUserDB();
                  }
 
-                 List<NTLIB.TwitterResult> res = _Twitter.ListReplyTimeline();
-                 foreach (NTLIB.TwitterResult row in res)
+                 List<NTLIB.TwitterStatusLight> res = _Twitter.ListReplyTimeline();
+                 foreach (NTLIB.TwitterStatusLight row in res)
                  {
                      db.AddUserData(row.UserId, row.UserName, row.UserScreenName);
                  }
+
+                 _Twitter.BaranceFollow();
              }
         }
 
@@ -135,10 +117,10 @@ namespace TriciaBot
             _Twitter.TwitterReceiveStatusEvent += _Twitter_TwitterReceiveStatusEvent;
         }
 
-        void _Twitter_TwitterReceiveStatusEvent(NTLIB.TwitterResult result)
+        void _Twitter_TwitterReceiveStatusEvent(NTLIB.TwitterStatusLight result)
         {
             //ここの条件にフォロワー限定を入れる　今は仮で開放
-            if (result.InReplyToUserId == 2354246292L)
+            if (result.InReplyToUserId == Properties.Settings.Default.MyUserID)
             {
                 UserDB db = new UserDB(Properties.Settings.Default.DatabaseFileName);
                 String nickName = db.SelectUserNickname(result.UserId);

@@ -22,13 +22,13 @@ namespace NTLIB
         public String AccessToken { get; private set; }
         public String AccessSecret { get; private set; }
 
-        public List<TwitterResult> HomeTimeLine { get; private set; }
+        public List<TwitterStatusLight> HomeTimeLine { get; private set; }
 
         private String PinCodeStartTag = "<CODE>";
         private Int32 PinCodeOffset = 13;
 
         //ユーザーストリームのPushを受け取ったときのイベント用
-        public delegate void TwitterReceiveStatusEventHandler(TwitterResult result);
+        public delegate void TwitterReceiveStatusEventHandler(TwitterStatusLight result);
         public event TwitterReceiveStatusEventHandler TwitterReceiveStatusEvent;
 
         public Twitter(String consumerKey, String consumerSecret)
@@ -57,15 +57,54 @@ namespace NTLIB
             this.AccessSecret = accessSecret;
         }
 
+        private NTLIB.TwitterUser ConvertUser(TweetSharp.TwitterUser suser)
+        {
+            NTLIB.TwitterUser user = new TwitterUser();
+            if (suser == null) return user;
+            user.ContributorsEnabled = suser.ContributorsEnabled;
+            user.CreatedDate = suser.CreatedDate;
+            user.DefaultProfile = suser.IsDefaultProfile;
+            user.Description = suser.Description;
+            user.FavouritesCount = suser.FavouritesCount;
+            user.FollowersCount = suser.FollowersCount;
+            user.FollowRequestSent = suser.FollowRequestSent;
+            user.FriendsCount = suser.FriendsCount;
+            user.Id = suser.Id;
+            user.IsGeoEnabled = suser.IsGeoEnabled;
+            user.IsProfileBackgroundTiled = suser.IsProfileBackgroundTiled;
+            user.IsProtected = suser.IsProtected;
+            user.IsTranslator = suser.IsTranslator;
+            user.IsVerified = suser.IsVerified;
+            user.Language = suser.Language;
+            user.ListedCount = suser.ListedCount;
+            user.Location = suser.Location;
+            user.Name = suser.Name;
+            user.ProfileBackgroundColor = suser.ProfileBackgroundColor;
+            user.ProfileBackgroundImageUrl = suser.ProfileBackgroundImageUrl;
+            user.ProfileBackgroundImageUrlHttps = suser.ProfileBackgroundImageUrlHttps;
+            user.ProfileImageUrl = suser.ProfileImageUrl;
+            user.ProfileImageUrlHttps = suser.ProfileImageUrlHttps;
+            user.ProfileLinkColor = suser.ProfileLinkColor;
+            user.ProfileSidebarBorderColor = suser.ProfileSidebarBorderColor;
+            user.ProfileSidebarFillColor = suser.ProfileSidebarFillColor;
+            user.ProfileTextColor = suser.ProfileTextColor;
+            user.ScreenName = suser.ScreenName;
+            user.Status = ConvertResult(suser.Status);
+            user.StatusesCount = suser.StatusesCount;
+            user.TimeZone = suser.TimeZone;
+            user.Url = suser.Url;
+            user.UtcOffset = suser.UtcOffset;
+            return user;
+        }
         /// <summary>
         /// 外部から隠匿するためにTweetSharpのTwitterStatusから最低限だけ抜き出す
         /// </summary>
         /// <param name="row"></param>
         /// <returns></returns>
-        private TwitterResult ConvertResult(TwitterStatus row)
+        private TwitterStatusLight ConvertResult(TwitterStatus row)
         {
 
-            TwitterResult res = new TwitterResult();
+            TwitterStatusLight res = new TwitterStatusLight();
 
             if (row != null)
             {
@@ -86,9 +125,12 @@ namespace NTLIB
                 res.RetweetedStatus = ConvertResult(row.RetweetedStatus);
                 res.Source = row.Source;
                 res.Text = row.Text;
-                res.UserName = row.User.Name;
-                res.UserScreenName = row.User.ScreenName;
-                res.UserId = row.User.Id;
+                if (row.User != null)
+                {
+                    res.UserName = row.User.Name;
+                    res.UserScreenName = row.User.ScreenName;
+                    res.UserId = row.User.Id;
+                }
             }
             return res;
         }
@@ -142,65 +184,65 @@ namespace NTLIB
         }
 
 
-        public List<TwitterResult> ListHomeTimeline()
+        public List<TwitterStatusLight> ListHomeTimeline()
         {
             IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions());
 
-            List<TwitterResult> convertResponse = new List<TwitterResult>();
+            List<TwitterStatusLight> convertResponse = new List<TwitterStatusLight>();
 
             foreach (TwitterStatus row in response)
             {
-                TwitterResult res = ConvertResult(row);
+                TwitterStatusLight res = ConvertResult(row);
                 convertResponse.Add(res);
             }
 
             return convertResponse;
         }
 
-        public List<TwitterResult> ListHomeTimeline(Int64 LastID)
+        public List<TwitterStatusLight> ListHomeTimeline(Int64 LastID)
         {
             ListTweetsOnHomeTimelineOptions option = new ListTweetsOnHomeTimelineOptions();
             option.SinceId = LastID;
 
             IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(option);
 
-            List<TwitterResult> convertResponse = new List<TwitterResult>();
+            List<TwitterStatusLight> convertResponse = new List<TwitterStatusLight>();
 
             foreach(TwitterStatus row in response)
             {
-                TwitterResult res = ConvertResult(row);
+                TwitterStatusLight res = ConvertResult(row);
                 convertResponse.Add(res);
             }
 
             return convertResponse;
         }
 
-        public List<TwitterResult> ListReplyTimeline()
+        public List<TwitterStatusLight> ListReplyTimeline()
         {
             IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsMentioningMe(new ListTweetsMentioningMeOptions());
 
-            List<TwitterResult> convertResponse = new List<TwitterResult>();
+            List<TwitterStatusLight> convertResponse = new List<TwitterStatusLight>();
 
             foreach (TwitterStatus row in response)
             {
-                TwitterResult res = ConvertResult(row);
+                TwitterStatusLight res = ConvertResult(row);
                 convertResponse.Add(res);
             }
 
             return convertResponse;
         }
-        public List<TwitterResult> ListReplyTimeline(Int64 LastID)
+        public List<TwitterStatusLight> ListReplyTimeline(Int64 LastID)
         {
             ListTweetsMentioningMeOptions option = new ListTweetsMentioningMeOptions();
             option.SinceId = LastID;
 
             IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsMentioningMe(option);
 
-            List<TwitterResult> convertResponse = new List<TwitterResult>();
+            List<TwitterStatusLight> convertResponse = new List<TwitterStatusLight>();
 
             foreach (TwitterStatus row in response)
             {
-                TwitterResult res = ConvertResult(row);
+                TwitterStatusLight res = ConvertResult(row);
                 convertResponse.Add(res);
             }
 
@@ -223,22 +265,76 @@ namespace NTLIB
                 if(streamEvent is TwitterUserStreamStatus)
                 {
                     TwitterUserStreamStatus status = (TwitterUserStreamStatus)streamEvent;
-                    TwitterResult convertedResult =  ConvertResult(status.Status);
+                    TwitterStatusLight convertedResult =  ConvertResult(status.Status);
                     TwitterReceiveStatusEvent(convertedResult);
                 }
-
                 count++;
                 if (count == maxStreamEvents)
                 {
                     block.Set();
                 }
             });
-
             //block.WaitOne();
             _TwitterService.CancelStreaming();
+        }
 
+        public List<NTLIB.TwitterUser> ListFollower()
+        {
+            IEnumerable<TweetSharp.TwitterUser> response = _TwitterService.ListFollowers(new ListFollowersOptions());
+            List<NTLIB.TwitterUser> convertUser = new List<NTLIB.TwitterUser>();
+            foreach (TweetSharp.TwitterUser suser in response)
+            {
+                NTLIB.TwitterUser user = ConvertUser(suser);
+                convertUser.Add(user);
+            }
+            return convertUser;
+        }
+
+        public List<NTLIB.TwitterUser> ListFriends()
+        {
+            IEnumerable<TweetSharp.TwitterUser> response = _TwitterService.ListFriends(new ListFriendsOptions());
+            List<NTLIB.TwitterUser> convertUser = new List<NTLIB.TwitterUser>();
+            foreach (TweetSharp.TwitterUser suser in response)
+            {
+                NTLIB.TwitterUser user = ConvertUser(suser);
+                convertUser.Add(user);
+            }
+            return convertUser;
+        }
+
+        public NTLIB.TwitterUser FollowUser(Int64 id)
+        {
+           TweetSharp.TwitterUser response = _TwitterService.FollowUser(new FollowUserOptions{UserId = id});
+            return ConvertUser(response);
+        }
+        public NTLIB.TwitterUser UnFollowUser(Int64 id)
+        {
+            TweetSharp.TwitterUser response = _TwitterService.UnfollowUser(new UnfollowUserOptions { UserId = id });
+            return ConvertUser(response);
+        }
+
+        /// <summary>
+        /// フォローしてない人をフォローして、フォロー解除されてたら解除する
+        /// </summary>
+        public void BaranceFollow()
+        {
+            List<NTLIB.TwitterUser> followers = ListFollower();
+            List<NTLIB.TwitterUser> friends = ListFriends();
+
+            List<Int64> followers_arr = new List<Int64>();
+            List<Int64> friends_arr = new List<Int64>();
+
+            followers.ForEach((e) => { followers_arr.Add(e.Id); });
+            friends.ForEach((e) => { friends_arr.Add(e.Id); });
+
+            List<Int64> notFollow = new List<Int64>(); // フォローするリスト
+            notFollow = followers_arr.Except(friends_arr).ToList();
+            List<Int64> notFollower = new List<Int64>(); //フォロー解除するリスト
+            notFollower = friends_arr.Except(followers_arr).ToList();
+
+            notFollow.ForEach((e) => { FollowUser(e); });
+            notFollower.ForEach((e) => { UnFollowUser(e); });
 
         }
-        
     }
 }
