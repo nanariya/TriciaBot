@@ -26,5 +26,11 @@
     <Setting Name="MyUserID" Type="System.Int64" Scope="User">
       <Value Profile="(Default)">2354246292</Value>
     </Setting>
+    <Setting Name="DBCreateWhiteListTable" Type="System.String" Scope="User">
+      <Value Profile="(Default)">create table whitelist(id LONG PRIMARY KEY)</Value>
+    </Setting>
+    <Setting Name="DBSelectWhiteListTable" Type="System.String" Scope="User">
+      <Value Profile="(Default)">select * from whitelist</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

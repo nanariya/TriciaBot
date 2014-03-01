@@ -22,6 +22,12 @@ namespace TriciaBot
             sql.ExecuteNonQuery(Properties.Settings.Default.DBCreateUserTable);
         }
 
+        public void CreateWhiteListDB()
+        {
+            NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
+            sql.ExecuteNonQuery(Properties.Settings.Default.DBCreateWhiteListTable);
+        }
+
         public String SelectUserNickname(Int64 id)
         {
             NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
@@ -73,5 +79,17 @@ namespace TriciaBot
             NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
             sql.UpdateDatatableQuery(dt, Properties.Settings.Default.DBSelectUserTable);
         }
+
+        private DataTable SelectWhiteListTable()
+        {
+            NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
+            return sql.SelectQuery(Properties.Settings.Default.DBSelectWhiteListTable);
+        }
+        private void UpdateWhiteListTable(DataTable dt)
+        {
+            NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
+            sql.UpdateDatatableQuery(dt, Properties.Settings.Default.DBSelectWhiteListTable);
+        }
+
     }
 }

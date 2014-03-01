@@ -119,5 +119,29 @@ namespace TriciaBot.Properties {
                 this["MyUserID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("create table whitelist(id LONG PRIMARY KEY)")]
+        public string DBCreateWhiteListTable {
+            get {
+                return ((string)(this["DBCreateWhiteListTable"]));
+            }
+            set {
+                this["DBCreateWhiteListTable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("select * from whitelist")]
+        public string DBSelectWhiteListTable {
+            get {
+                return ((string)(this["DBSelectWhiteListTable"]));
+            }
+            set {
+                this["DBSelectWhiteListTable"] = value;
+            }
+        }
     }
 }

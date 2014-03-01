@@ -80,7 +80,7 @@ namespace TriciaBot
 
         private void button1_Click(object sender, EventArgs e)
         {
-             if(_Twitter != null)
+             if(_Twitter != null && _Twitter.isAuthed)
              {
                  UserDB db = new UserDB(Properties.Settings.Default.DatabaseFileName);
                  if (!File.Exists(Properties.Settings.Default.DatabaseFileName))
@@ -113,8 +113,11 @@ namespace TriciaBot
 
         private void button4_Click(object sender, EventArgs e)
         {
-            _Twitter.ListHomeTimelineLoop();
-            _Twitter.TwitterReceiveStatusEvent += _Twitter_TwitterReceiveStatusEvent;
+            if (_Twitter != null && _Twitter.isAuthed)
+            {
+                _Twitter.ListHomeTimelineLoop();
+                _Twitter.TwitterReceiveStatusEvent += _Twitter_TwitterReceiveStatusEvent;
+            }
         }
 
         void _Twitter_TwitterReceiveStatusEvent(NTLIB.TwitterStatusLight result)
