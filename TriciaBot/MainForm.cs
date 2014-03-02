@@ -94,7 +94,8 @@ namespace TriciaBot
                      db.AddUserData(row.UserId, row.UserName, row.UserScreenName);
                  }
 
-                 _Twitter.BaranceFollow();
+                 List<Int64> whiteListID = db.SelectWhiteList();
+                 _Twitter.BaranceFollow(whiteListID);
              }
         }
 

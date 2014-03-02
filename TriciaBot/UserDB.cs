@@ -55,7 +55,6 @@ namespace TriciaBot
             {
                 row["name"] = name;
                 row["screen_name"] = screenName;
-                //row["nick_name"] = nickName;
             }
             else 
             {
@@ -63,10 +62,40 @@ namespace TriciaBot
                 ad["id"] = id;
                 ad["name"] = name;
                 ad["screen_name"] = screenName;
-                //ad["nick_name"] = nickName;
                 dt.Rows.Add(ad);
             }
             UpdateUserTable(dt);
+        }
+
+        public List<Int64> SelectWhiteList()
+        {
+            NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
+            DataTable res = sql.SelectQuery(Properties.Settings.Default.DBSelectWhiteListTable);
+            List<Int64> idList = res.Columns.Cast<Int64>().ToList();
+            return idList;
+        }
+        public Boolean AddWhiteList(Int64 id)
+        {
+            DataTable dt = SelectWhiteListTable();
+            DataRow row = dt.Rows.Find(id);
+            if (row != null)
+            {
+                row["name"] = name;
+                row["screen_name"] = screenName;
+            }
+            else
+            {
+                DataRow ad = dt.NewRow();
+                ad["id"] = id;
+                ad["name"] = name;
+                ad["screen_name"] = screenName;
+                dt.Rows.Add(ad);
+            }
+            UpdateUserTable(dt);
+        }
+        public Boolean DelWhiteList(Int64 id)
+        {
+
         }
 
         private DataTable SelectUserTable()

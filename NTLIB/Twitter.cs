@@ -144,7 +144,7 @@ namespace NTLIB
 
         public Uri GetAuthURL()
         {
-            m_RequestToken = _TwitterService.GetRequestToken();
+            _RequestToken = _TwitterService.GetRequestToken();
             return _TwitterService.GetAuthenticationUrl(_RequestToken);
         }
         public void PinCodeAuth(String pinCode)
@@ -316,7 +316,7 @@ namespace NTLIB
         /// <summary>
         /// フォローしてない人をフォローして、フォロー解除されてたら解除する
         /// </summary>
-        public void BaranceFollow()
+        public void BaranceFollow(List<Int64> whiteListId)
         {
             List<NTLIB.TwitterUser> followers = ListFollower();
             List<NTLIB.TwitterUser> friends = ListFriends();
