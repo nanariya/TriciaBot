@@ -144,7 +144,7 @@ namespace NTLIB
 
         public Uri GetAuthURL()
         {
-            _RequestToken = _TwitterService.GetRequestToken();
+            m_RequestToken = _TwitterService.GetRequestToken();
             return _TwitterService.GetAuthenticationUrl(_RequestToken);
         }
         public void PinCodeAuth(String pinCode)
