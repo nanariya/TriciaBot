@@ -10,6 +10,9 @@ namespace TriciaBot
     {
         public String ConsumerKey { get; set; }
         public String ConsumerSecret { get; set; }
+        public String GmailAddress { get; set; }
+        public String GmailID { get; set; }
+        public String GmailPass { get; set; }
 
         public AppData()
         {

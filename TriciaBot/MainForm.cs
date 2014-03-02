@@ -157,5 +157,12 @@ namespace TriciaBot
             Invoke(new TextAddDelegate(richTextBox1.AppendText), result.UserName + ":" + result.Text + Environment.NewLine);
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            AppData appData = NTLIB.Tool.LoadConfig(typeof(AppData));
+            NTLIB.Gmail mail = new NTLIB.Gmail(appData.GmailAddress, appData.GmailID, appData.GmailPass);
+            mail.SentMail("sieben.riya@gmail.com", "ねむい", "そんなことはない");
+        }
+
     }
 }

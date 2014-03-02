@@ -78,24 +78,22 @@ namespace TriciaBot
         {
             DataTable dt = SelectWhiteListTable();
             DataRow row = dt.Rows.Find(id);
-            if (row != null)
-            {
-                row["name"] = name;
-                row["screen_name"] = screenName;
-            }
-            else
+            Boolean inserted = false;
+            if (row == null)
             {
                 DataRow ad = dt.NewRow();
                 ad["id"] = id;
-                ad["name"] = name;
-                ad["screen_name"] = screenName;
                 dt.Rows.Add(ad);
+                inserted = true;
+                UpdateUserTable(dt);
             }
-            UpdateUserTable(dt);
+            return inserted;            
         }
-        public Boolean DelWhiteList(Int64 id)
+        public void DelWhiteList(Int64 id)
         {
-
+            DataTable dt = SelectWhiteListTable();
+            dt.Rows.Find(id).Delete();
+            UpdateUserTable(dt);
         }
 
         private DataTable SelectUserTable()
