@@ -19,6 +19,24 @@ namespace NTLIB
             set { _JumanPath = value; }
         }
         
+        public static String execJumanRaw(String message)
+        {
+            ProcessStartInfo psInfo = new ProcessStartInfo();
+            psInfo.FileName = _JumanPath;
+            psInfo.CreateNoWindow = true;
+            psInfo.UseShellExecute = false;
+            psInfo.RedirectStandardInput = true;
+            psInfo.RedirectStandardOutput = true;
+
+            Process p = Process.Start(psInfo);
+            using (StreamWriter sw = p.StandardInput)
+            {
+                sw.Write(message);
+            }
+
+            String result = p.StandardOutput.ReadToEnd();
+            return result;
+        }
 
         public static List<JumanResult> execJuman(String message)
         {

@@ -103,9 +103,7 @@ namespace NTLIB
         /// <returns></returns>
         private TwitterStatusLight ConvertResult(TwitterStatus row)
         {
-
             TwitterStatusLight res = new TwitterStatusLight();
-
             if (row != null)
             {
                 res.CreateDate = row.CreatedDate;
@@ -140,6 +138,7 @@ namespace NTLIB
             this.AccessToken = accessToken;
             this.AccessSecret = accessSecret;
             _TwitterService.AuthenticateWith(this.AccessToken, this.AccessSecret);
+            this.isAuthed = true;
         }
 
         public Uri GetAuthURL()
@@ -163,14 +162,12 @@ namespace NTLIB
         public String GetPinCodeFromHTML(String html)
         {
             String pinCode = "";
-
             if (0 < html.IndexOf(this.PinCodeStartTag))
             {
                 int loc = html.IndexOf(this.PinCodeStartTag);
                 pinCode = html.Substring(loc, this.PinCodeOffset);
                 pinCode = pinCode.Replace(this.PinCodeStartTag, "");
             }
-
             return pinCode;
         }
 
@@ -183,19 +180,15 @@ namespace NTLIB
             TwitterStatus result = _TwitterService.SendTweet(new SendTweetOptions { Status = message, InReplyToStatusId = toReplyId });
         }
 
-
         public List<TwitterStatusLight> ListHomeTimeline()
         {
             IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions());
-
             List<TwitterStatusLight> convertResponse = new List<TwitterStatusLight>();
-
             foreach (TwitterStatus row in response)
             {
                 TwitterStatusLight res = ConvertResult(row);
                 convertResponse.Add(res);
             }
-
             return convertResponse;
         }
 
@@ -203,15 +196,12 @@ namespace NTLIB
         {
             ListTweetsOnHomeTimelineOptions option = new ListTweetsOnHomeTimelineOptions();
             option.SinceId = LastID;
-
             IEnumerable<TwitterStatus> response = _TwitterService.ListTweetsOnHomeTimeline(option);
-
             List<TwitterStatusLight> convertResponse = new List<TwitterStatusLight>();
-
             foreach(TwitterStatus row in response)
             {
                 TwitterStatusLight res = ConvertResult(row);
-                convertResponse.Add(res);
+                convertResponse.Add(res); 
             }
 
             return convertResponse;
@@ -331,6 +321,7 @@ namespace NTLIB
             notFollow = followers_arr.Except(friends_arr).ToList();
             List<Int64> notFollower = new List<Int64>(); //フォロー解除するリスト
             notFollower = friends_arr.Except(followers_arr).ToList();
+            notFollower = notFollower.Except(whiteListId).ToList();//ホワイトリストに載ってる人を取り除く
 
             notFollow.ForEach((e) => { FollowUser(e); });
             notFollower.ForEach((e) => { UnFollowUser(e); });

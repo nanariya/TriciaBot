@@ -124,6 +124,7 @@ namespace TriciaBot
         void _Twitter_TwitterReceiveStatusEvent(NTLIB.TwitterStatusLight result)
         {
             //ここの条件にフォロワー限定を入れる　今は仮で開放
+            /*
             if (result.InReplyToUserId == Properties.Settings.Default.MyUserID)
             {
                 UserDB db = new UserDB(Properties.Settings.Default.DatabaseFileName);
@@ -154,7 +155,17 @@ namespace TriciaBot
                 System.Threading.Thread.Sleep(5000);
                 Invoke(new SendTweetReplyDelegate(_Twitter.SendTweetToReply), param);
             }
-            Invoke(new TextAddDelegate(richTextBox1.AppendText), result.UserName + ":" + result.Text + Environment.NewLine);
+            */
+            /*
+            List<NTLIB.JumanResult> jumanResult = NTLIB.Juman.execJuman(result.Text);
+            jumanResult.ForEach((e) =>
+            {
+                Invoke(new TextAddDelegate(richTextBox1.AppendText), result.UserName + ":" + e.Word + "," + e.Part + Environment.NewLine);
+            });
+             */
+            String sResult = NTLIB.Cabocha.execCabocha(result.Text);
+            Invoke(new TextAddDelegate(richTextBox1.AppendText), sResult + Environment.NewLine);
+            //Invoke(new TextAddDelegate(richTextBox1.AppendText), result.UserName + ":" + result.Text + Environment.NewLine);
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -168,7 +179,9 @@ namespace TriciaBot
         {
             AppData appData = NTLIB.Tool.LoadConfig(typeof(AppData));
             NTLIB.GCal cal = new NTLIB.GCal(appData.GmailID, appData.GmailPass);
-            //cal.WriteSchedule("ミーティング", "ご飯を食べるだけ", "秋葉原","sieben.riya@gmail.com", DateTime.Now, DateTime.Now);
+            List<String> guests = new List<String>();
+            guests.Add("sieben.riya@gmail.com");
+            cal.WriteSchedule("ミーティング", "ご飯を食べるだけ", "秋葉原", guests, DateTime.Now, DateTime.Now);
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -183,6 +196,15 @@ namespace TriciaBot
                     richTextBox1.AppendText(mail + Environment.NewLine);
                 });
             }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            NTLIB.TwitterStatusLight status = new NTLIB.TwitterStatusLight();
+            status.Text = textBox2.Text;
+            //textBox2.Text = "";
+            richTextBox1.Text = "";
+            _Twitter_TwitterReceiveStatusEvent(status);
         }
 
     }

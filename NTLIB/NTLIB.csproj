@@ -85,6 +85,8 @@
     <Compile Include="GCal.cs" />
     <Compile Include="GCalItem.cs" />
     <Compile Include="Gmail.cs" />
+    <Compile Include="Cabocha.cs" />
+    <Compile Include="KNP.cs" />
     <Compile Include="Juman.cs" />
     <Compile Include="JumanResult.cs" />
     <Compile Include="SQLite3.cs" />
