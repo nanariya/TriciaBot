@@ -164,5 +164,12 @@ namespace TriciaBot
             mail.SentMail("sieben.riya@gmail.com", "ねむい", "そんなことはない");
         }
 
+        private void button6_Click(object sender, EventArgs e)
+        {
+            AppData appData = NTLIB.Tool.LoadConfig(typeof(AppData));
+            NTLIB.GCal cal = new NTLIB.GCal(appData.GmailID, appData.GmailPass);
+            cal.WriteSchedule("ミーティング", "ご飯を食べるだけ", "秋葉原", DateTime.Now, DateTime.Now);
+        }
+
     }
 }
