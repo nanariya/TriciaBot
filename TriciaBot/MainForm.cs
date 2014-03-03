@@ -168,7 +168,21 @@ namespace TriciaBot
         {
             AppData appData = NTLIB.Tool.LoadConfig(typeof(AppData));
             NTLIB.GCal cal = new NTLIB.GCal(appData.GmailID, appData.GmailPass);
-            cal.WriteSchedule("ミーティング", "ご飯を食べるだけ", "秋葉原", DateTime.Now, DateTime.Now);
+            //cal.WriteSchedule("ミーティング", "ご飯を食べるだけ", "秋葉原","sieben.riya@gmail.com", DateTime.Now, DateTime.Now);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            AppData appData = NTLIB.Tool.LoadConfig(typeof(AppData));
+            NTLIB.GCal cal = new NTLIB.GCal(appData.GmailID, appData.GmailPass);
+            List<NTLIB.GCalItem> items = cal.ReadSchedule(new DateTime(2014, 1, 1), new DateTime(2014, 12, 1), true).ToList();
+            foreach(NTLIB.GCalItem item in items)
+            {
+                item.GuestsEmail.ForEach((mail) =>
+                {
+                    richTextBox1.AppendText(mail + Environment.NewLine);
+                });
+            }
         }
 
     }

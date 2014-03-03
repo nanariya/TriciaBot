@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GCal.cs" />
+    <Compile Include="GCalItem.cs" />
     <Compile Include="Gmail.cs" />
     <Compile Include="Juman.cs" />
     <Compile Include="JumanResult.cs" />

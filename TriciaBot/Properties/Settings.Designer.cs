@@ -86,7 +86,7 @@ namespace TriciaBot.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("create table user(id LONG  PRIMARY KEY, name TEXT, screen_name TEXT,nick_name TEX" +
-            "T)")]
+            "T, mail TEXT)")]
         public string DBCreateUserTable {
             get {
                 return ((string)(this["DBCreateUserTable"]));
@@ -141,6 +141,18 @@ namespace TriciaBot.Properties {
             }
             set {
                 this["DBSelectWhiteListTable"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("tricia.disraeli@gmail.com")]
+        public string MyMailAddress {
+            get {
+                return ((string)(this["MyMailAddress"]));
+            }
+            set {
+                this["MyMailAddress"] = value;
             }
         }
     }

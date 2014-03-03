@@ -18,7 +18,7 @@
       <Value Profile="(Default)">user.sqlite3</Value>
     </Setting>
     <Setting Name="DBCreateUserTable" Type="System.String" Scope="User">
-      <Value Profile="(Default)">create table user(id LONG  PRIMARY KEY, name TEXT, screen_name TEXT,nick_name TEXT)</Value>
+      <Value Profile="(Default)">create table user(id LONG  PRIMARY KEY, name TEXT, screen_name TEXT,nick_name TEXT, mail TEXT)</Value>
     </Setting>
     <Setting Name="DBSelectUserTable" Type="System.String" Scope="User">
       <Value Profile="(Default)">select * from user</Value>
@@ -31,6 +31,9 @@
     </Setting>
     <Setting Name="DBSelectWhiteListTable" Type="System.String" Scope="User">
       <Value Profile="(Default)">select * from whitelist</Value>
+    </Setting>
+    <Setting Name="MyMailAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tricia.disraeli@gmail.com</Value>
     </Setting>
   </Settings>
 </SettingsFile>
