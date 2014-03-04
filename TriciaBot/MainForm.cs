@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml;
 
 namespace TriciaBot
 {
@@ -163,8 +164,8 @@ namespace TriciaBot
                 Invoke(new TextAddDelegate(richTextBox1.AppendText), result.UserName + ":" + e.Word + "," + e.Part + Environment.NewLine);
             });
              */
-            String sResult = NTLIB.Cabocha.execCabocha(result.Text);
-            Invoke(new TextAddDelegate(richTextBox1.AppendText), sResult + Environment.NewLine);
+            //NTLIB.CabochaResult cabo = NTLIB.Cabocha.execCabocha(result.Text);
+
             //Invoke(new TextAddDelegate(richTextBox1.AppendText), result.UserName + ":" + result.Text + Environment.NewLine);
         }
 

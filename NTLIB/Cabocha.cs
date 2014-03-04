@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using System.Xml;
 
 namespace NTLIB
 {
@@ -20,7 +21,7 @@ namespace NTLIB
         }
         
 
-        public static String execCabocha(String message)
+        public static CabochaResult execCabocha(String message)
         {
             ProcessStartInfo psInfo = new ProcessStartInfo();
             psInfo.FileName = _CabochaPath;
@@ -36,12 +37,35 @@ namespace NTLIB
                 sw.Write(message);
             }
 
-            String result = p.StandardOutput.ReadToEnd();
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(p.StandardOutput.ReadToEnd());
 
-            Debug.Write(result);
+            Debug.WriteLine(xml.InnerXml);
+
+            CabochaResult result = new CabochaResult();
+
+            foreach(XmlElement xmlWord in xml.DocumentElement)
+            {
+                String word = "";
+                String lword = "";
+                List<String> hinsi = new List<String>();
+                if (xmlWord.ChildNodes.Count == 1)
+                {
+                    word = xmlWord.LastChild.InnerText;
+                }
+                else
+                {
+                    for (Int32 i = 0; i < xmlWord.ChildNodes.Count - 1; i++)
+                    {
+                        word += xmlWord.ChildNodes[i].InnerText;
+                        hinsi.Add(xmlWord.ChildNodes[i].Attributes["feature"].Value.Split(',')[5]);
+                    }
+                    lword = xmlWord.LastChild.InnerText;
+                    String last_p = xmlWord.LastChild.Attributes["feature"].Value.ToString();
+                }
+            }
 
             return result;
-
         }
     }
 }
