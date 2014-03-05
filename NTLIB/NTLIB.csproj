@@ -90,6 +90,8 @@
     <Compile Include="KNP.cs" />
     <Compile Include="Juman.cs" />
     <Compile Include="JumanResult.cs" />
+    <Compile Include="Panoramio.cs" />
+    <Compile Include="PanoramioResult.cs" />
     <Compile Include="SQLite3.cs" />
     <Compile Include="Tool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

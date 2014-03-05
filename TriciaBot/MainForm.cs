@@ -89,6 +89,7 @@ namespace TriciaBot
                      db.CreateUserDB();
                  }
 
+                 /*
                  List<NTLIB.TwitterStatusLight> res = _Twitter.ListReplyTimeline();
                  foreach (NTLIB.TwitterStatusLight row in res)
                  {
@@ -97,6 +98,7 @@ namespace TriciaBot
 
                  List<Int64> whiteListID = db.SelectWhiteList();
                  _Twitter.BaranceFollow(whiteListID);
+                  */
              }
         }
 
@@ -117,8 +119,8 @@ namespace TriciaBot
         {
             if (_Twitter != null && _Twitter.isAuthed)
             {
-                _Twitter.ListHomeTimelineLoop();
                 _Twitter.TwitterReceiveStatusEvent += _Twitter_TwitterReceiveStatusEvent;
+                _Twitter.ListHomeTimelineLoop();
             }
         }
 

@@ -21,7 +21,7 @@ namespace TriciaBot
         {
             if (args.Length > 0)
             {
-                if(AttachConsole(System.UInt32.MaxValue))
+                if(AttachConsole(System.UInt32.MaxValue) || true)
                 {
                     try
                     {
