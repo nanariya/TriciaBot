@@ -26,12 +26,16 @@ namespace TriciaBot
                     try
                     {
                         System.IO.StreamWriter stdout = new System.IO.StreamWriter(System.Console.OpenStandardOutput(),
-                            System.Text.Encoding.GetEncoding("shift-jis"));
+                        System.Text.Encoding.GetEncoding("shift-jis"));
                         stdout.AutoFlush = true;
                         System.Console.SetOut(stdout);
 
                         Proc.Start(args);
                         FreeConsole();
+                    }
+                    catch(Exception e)
+                    {
+                        System.IO.File.AppendAllText("debug.txt", e.Message);
                     }
                     finally
                     {

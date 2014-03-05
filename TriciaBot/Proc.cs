@@ -49,7 +49,7 @@ namespace TriciaBot
                 if (Properties.Settings.Default.AccessToken == "" || Properties.Settings.Default.AccessSecret == "") return;
                 tw.AuthenticateWith(Properties.Settings.Default.AccessToken, Properties.Settings.Default.AccessSecret);
 
-                tw.SendTweet("ランダムに選んだスコットランド地方の写真₍₍ ᕕ(՞ةڼ◔)ᕗ⁾⁾ " + result);
+                tw.SendTweet("スコットランド地方の風景 " + result);
             }
             catch(Exception)
             {

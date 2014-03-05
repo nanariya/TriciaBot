@@ -88,9 +88,13 @@ namespace TriciaBot
 
         public List<Int64> SelectWhiteList()
         {
+            List<Int64> idList = new List<Int64>();
             NTLIB.SQLite3 sql = new NTLIB.SQLite3(this.FileName);
             DataTable res = sql.SelectQuery(Properties.Settings.Default.DBSelectWhiteListTable);
-            List<Int64> idList = res.Columns.Cast<Int64>().ToList();
+            if (res.Rows.Count > 0)
+            {
+                idList = res.Rows.Cast<Int64>().ToList();
+            }
             return idList;
         }
         public Boolean AddWhiteList(Int64 id)
